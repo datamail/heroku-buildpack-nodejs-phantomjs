@@ -1,6 +1,6 @@
-# Heroku Buildpack for Node.js
+# Heroku Buildpack for Node.js & Phantomjs
 
-This is the official [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Node.js apps. If you fork this repository, please **update this README** to explain what your fork does and why it's special.
+This is a fork of the official [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Node.js apps that also installs [Phantomjs](http://phantomjs.org/) at compile time. The scripts for installing Phantom were taken directly from Beedesk's [custom Phantomjs buildpack](https://github.com/beedesk/heroku-buildpack-phantomjs).
 
 
 ## How it Works
