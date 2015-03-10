@@ -163,6 +163,34 @@ install_npm() {
   fi
 }
 
+install_phantomjs() {
+  # config
+  VERSION="1.9.7"
+
+  # Buildpack URL
+  ARCHIVE_NAME=phantomjs-${VERSION}-linux-x86_64
+  FILE_NAME=${ARCHIVE_NAME}.tar.bz2
+  BUILDPACK_PHANTOMJS_PACKAGE=https://bitbucket.org/ariya/phantomjs/downloads/${FILE_NAME}
+
+  mkdir -p $cache_dir
+  if ! [ -e $cache_dir/$FILE_NAME ]; then
+    echo "-----> Fetching PhantomJS ${VERSION} binaries at ${BUILDPACK_PHANTOMJS_PACKAGE}"
+    curl $BUILDPACK_PHANTOMJS_PACKAGE -L -s -o $cache_dir/$FILE_NAME
+  fi
+
+  echo "-----> Extracting PhantomJS ${VERSION} binaries to ${build_dir}/vendor/phantomjs"
+  mkdir -p $cache_dir/$ARCHIVE_NAME
+  mkdir -p $build_dir/vendor
+  tar jxf $cache_dir/$FILE_NAME -C $cache_dir
+  mv $cache_dir/$ARCHIVE_NAME $build_dir/vendor/phantomjs
+
+  echo "-----> exporting PATH and LIBRARY_PATH"
+  PROFILE_PATH="$build_dir/.profile.d/phantomjs.sh"
+  mkdir -p $(dirname $PROFILE_PATH)
+  echo 'export PATH="$PATH:vendor/phantomjs/bin"' >> $PROFILE_PATH
+  echo 'export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:vendor/phantomjs/lib"' >> $PROFILE_PATH
+}
+
 function build_dependencies() {
   if [ "$modules_source" == "" ]; then
     info "Skipping dependencies (no source for node_modules)"
